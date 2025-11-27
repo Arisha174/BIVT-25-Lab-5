@@ -116,36 +116,59 @@ namespace Lab5
         public int[,] Task5(int[,] matrix)
         {
             if (matrix == null) return null;
-            int n = matrix.GetLength(0); int m = matrix.GetLength(1);
+            
+            int n = matrix.GetLength(0); 
+            int m = matrix.GetLength(1);
+            
             if (n == 0) return new int[0, m];
-            int rbest = 0; int best = 0;
+            
+            int maxSum = -1;
+            int rowToRemove = -1;
             
             for (int i = 0; i < n; i++) 
             { 
-                int s = 0; 
+                int currentSum = 0;
+                bool hasPositive = false;
+                
                 for (int j = 0; j < m; j++) 
                 {
                     if (matrix[i, j] > 0) 
                     {
-                        s += matrix[i, j]; 
+                        currentSum += matrix[i, j];
+                        hasPositive = true;
                     }
-                    if (s > best) 
-                    { 
-                        best = s; rbest = i; 
-                    } 
+                }
+                if (!hasPositive)
+                {
+                    currentSum = 0;
+                }
+                if (currentSum > maxSum || rowToRemove == -1)
+                {
+                    maxSum = currentSum;
+                    rowToRemove = i;
                 }
             }
-            int[,] res = new int[n - 1, m]; int outi = 0;
+            
+            if (rowToRemove == -1)
+            {
+                return matrix;
+            }
+            
+            int[,] result = new int[n - 1, m];
+            int resultRow = 0;
+            
             for (int i = 0; i < n; i++) 
             { 
-                if (i == rbest) continue; 
+                if (i == rowToRemove) continue;
+                
                 for (int j = 0; j < m; j++) 
                 {
-                    res[outi, j] = matrix[i, j]; 
-                    outi++; 
+                    result[resultRow, j] = matrix[i, j];
                 }
+                resultRow++; 
             }
-            return res;
+            
+            return result;
         }
         public void Task6(int[,] matrix)
         {
